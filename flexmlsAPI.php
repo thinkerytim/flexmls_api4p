@@ -2,22 +2,25 @@
 
 class flexmlsAPI {
 
-	private $api_base = "api.flexmls.com";
-	public $last_error_code = null;
-	public $last_error_mess = null;
-	public $last_count = 0;
-	public $api_roles = null;
-	private $last_token = null;
-	private $last_token_expire = null;
-	private $api_key = null;
-	private $api_secret = null;
-	private $ch = null;
+	private $api_base 			= "api.flexmls.com";
+	public $last_error_code 	= null;
+	public $last_error_mess 	= null;
+	public $api_roles 			= null;
+	private $last_token 		= null;
+	private $last_token_expire 	= null;
+	private $api_key 			= null;
+	private $api_secret 		= null;
+	private $ch 				= null;
 	private $debug_log;
-	private $debug_mode = false;
-	private $application_name = null;
-	private $api_version = "v1";
-
-
+	private $debug_mode 		= false;
+	private $application_name 	= null;
+	private $api_version 		= "v1";
+	// pagination vars
+	public $last_count 			= 0;
+	public $page_size 			= 0;
+	public $total_pages 		= 0;
+	public $current_page 		= 0;
+	
 	function __construct($key, $secret) {
 		// set the api key and secret based on passed parameters
 		$this->api_key = $key;
@@ -357,7 +360,7 @@ class flexmlsAPI {
 			$full_url .= '?' . $query_string;
 		}
 
-		echo $full_url . "\n\n";
+		if ($this->debug_mode) echo $full_url . "\n\n";
 		
 		$request_headers = "";
 
@@ -386,7 +389,7 @@ class flexmlsAPI {
 			fwrite($this->debug_log, $response_body ."\n");
 		}
 
-		echo $response_body . "\n\n";
+		if ($this->debug_mode) echo $response_body . "\n\n";
 		
 		// start handling the response
 		$json = json_decode(utf8_encode($response_body), true);
@@ -403,7 +406,10 @@ class flexmlsAPI {
 		}
 
 		if ( array_key_exists('Pagination', $json['D']) ) {
-			$this->last_count = $json['D']['Pagination']['TotalRows'];
+			$this->last_count	 = $json['D']['Pagination']['TotalRows'];
+			$this->page_size	 = $json['D']['Pagination']['PageSize'];
+			$this->total_pages	 = $json['D']['Pagination']['TotalPages'];
+			$this->current_page	 = $json['D']['Pagination']['CurrentPage'];
 		}
 
 		if ( $json['D']['Success'] == true) {
