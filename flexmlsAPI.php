@@ -248,6 +248,19 @@ class flexmlsAPI {
 	}
 
 
+	function GetListingDocs($id) {
+
+		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/listings/{$id}/documents", array(), array(), $auth = false);
+
+		if ($result === false) {
+			return false;
+		}
+
+		return $result;
+
+	}
+
+
 	function GetListings($args = array()) {
 
 		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/listings", $args, array(), $auth = false);
