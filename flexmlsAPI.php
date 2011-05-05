@@ -53,7 +53,19 @@ class flexmlsAPI {
 	function SetApplicationName($name) {
 		$this->application_name = str_replace(array("\r", "\r\n", "\n"), '', trim($name));
 	}
+	
+	
+	function SetDebugMode($mode = false) {
+		$this->debug_mode = $mode;
+	}
 
+	function GetErrors() {
+		if ($this->last_error_code && $this->last_error_mess){
+			return $this->last_error_code . ' - ' . $this->last_error_mess;
+		} else {
+			return false;
+		}
+	}
 
 	function HasBasicRole() {
 
@@ -193,6 +205,19 @@ class flexmlsAPI {
 		}
 
 		return $records;
+
+	}
+
+
+	function GetListing($id, $args = array()) {
+
+		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/listings/{$id}", $args, array(), $auth = false);
+
+		if ($result === false) {
+			return false;
+		}
+
+		return $result;
 
 	}
 
