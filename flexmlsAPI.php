@@ -2,7 +2,7 @@
 
 class flexmlsAPI {
 
-	private $api_base 			= "api.flexmls.com";
+	private $api_base 			= "api.developers.flexmls.com";
 	public $last_error_code 	= null;
 	public $last_error_mess 	= null;
 	public $api_roles 			= null;
@@ -34,13 +34,6 @@ class flexmlsAPI {
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 
-		// enable logging if we're in debug mode
-		if ($this->debug_mode == true) {
-			$this->debug_log = fopen("debug.log", 'a');
-			curl_setopt($this->ch, CURLOPT_VERBOSE, 1);
-			curl_setopt($this->ch, CURLOPT_STDERR, $this->debug_log);
-		}
-
 	}
 
 
@@ -57,6 +50,12 @@ class flexmlsAPI {
 	
 	function SetDebugMode($mode = false) {
 		$this->debug_mode = $mode;
+		// enable logging if we're in debug mode
+		if ($this->debug_mode == true) {
+			$this->debug_log = fopen("debug.log", 'a');
+			curl_setopt($this->ch, CURLOPT_VERBOSE, 1);
+			curl_setopt($this->ch, CURLOPT_STDERR, $this->debug_log);
+		}
 	}
 
 	function GetErrors() {
