@@ -118,7 +118,7 @@ class flexmlsAPI {
 			return false;
 		}
 
-		return $result;
+		return $result[0][$field]['FieldList'];
 	}
 
 
