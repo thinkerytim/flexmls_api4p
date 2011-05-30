@@ -109,6 +109,17 @@ class flexmlsAPI {
 
 		return $result[0];
 	}
+	
+	
+	function GetStandardFieldList($field) {
+		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/standardfields/{$field}", array(), array(), $auth = false);
+
+		if ($result === false) {
+			return false;
+		}
+
+		return $result;
+	}
 
 
 	function GetMarketStats($type, $options = "", $property_type = "", $location_name = "", $location_value = "") {
