@@ -21,6 +21,7 @@ class flexmlsAPI {
 	public $total_pages 		= 0;
 	public $current_page 		= 0;
 	
+
 	function __construct($key, $secret) {
 		// set the api key and secret based on passed parameters
 		$this->api_key = $key;
@@ -41,8 +42,43 @@ class flexmlsAPI {
 		// clean cURL up
 		curl_close($this->ch);
 	}
+	
 
+	////////////////////////////////////////////////////////////////////
+	//  AUTH FUNCTIONS 
+	////////////////////////////////////////////////////////////////////	
+	
+	
+	function Authenticate($force = false) {
 
+		if ($this->last_token == null || $force == true) {
+			$result = $this->MakeAPIRequest("POST", "/{$this->api_version}/session", array(), array(), $auth = true, $force);
+
+			if ($result === false) {
+				return false;
+			}
+
+			$this->last_token = $result[0]['AuthToken'];
+			$this->last_token_expire = $result[0]['Expires'];
+		}
+	}	
+	
+
+	function GetSystemInfo() {
+
+		$args = array();
+
+		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/system", $args, array(), $auth = false);
+
+		if ($result === false) {
+			return false;
+		}
+
+		return $result[0];
+
+	}
+	
+	
 	function SetApplicationName($name) {
 		$this->application_name = str_replace(array("\r", "\r\n", "\n"), '', trim($name));
 	}
@@ -58,6 +94,7 @@ class flexmlsAPI {
 		}
 	}
 
+
 	function GetErrors() {
 		if ($this->last_error_code && $this->last_error_mess){
 			return $this->last_error_code . ' - ' . $this->last_error_mess;
@@ -65,6 +102,7 @@ class flexmlsAPI {
 			return false;
 		}
 	}
+	
 
 	function HasBasicRole() {
 
@@ -80,7 +118,12 @@ class flexmlsAPI {
 			return false;
 		}
 
-	}
+	}	
+
+	
+	////////////////////////////////////////////////////////////////////
+	//  SEARCH FUNCTIONS 
+	//////////////////////////////////////////////////////////////////// 
 
 
 	function GetContacts($tags = "") {
@@ -147,21 +190,6 @@ class flexmlsAPI {
 
 		return $result[0];
 
-	}
-
-
-	function Authenticate($force = false) {
-
-		if ($this->last_token == null || $force == true) {
-			$result = $this->MakeAPIRequest("POST", "/{$this->api_version}/session", array(), array(), $auth = true, $force);
-
-			if ($result === false) {
-				return false;
-			}
-
-			$this->last_token = $result[0]['AuthToken'];
-			$this->last_token_expire = $result[0]['Expires'];
-		}
 	}
 
 
@@ -283,6 +311,7 @@ class flexmlsAPI {
 
 	}
 
+
 	function GetMyListings($args = array()) {
 
 		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/my/listings", $args, array(), $auth = false);
@@ -312,21 +341,6 @@ class flexmlsAPI {
 		}
 
 		return $result;
-
-	}
-
-
-	function GetSystemInfo() {
-
-		$args = array();
-
-		$result = $this->MakeAPIRequest("GET", "/{$this->api_version}/system", $args, array(), $auth = false);
-
-		if ($result === false) {
-			return false;
-		}
-
-		return $result[0];
 
 	}
 
