@@ -2,22 +2,22 @@
 
 class flexmlsAPI {
 
-	private $api_base 			= "api.developers.flexmls.com";
+	private $api_base 		= "api.developers.flexmls.com";
 	public $last_error_code 	= null;
 	public $last_error_mess 	= null;
-	public $api_roles 			= null;
+	public $api_roles 		= null;
 	private $last_token 		= null;
 	private $last_token_expire 	= null;
-	private $api_key 			= null;
+	private $api_key 		= null;
 	private $api_secret 		= null;
-	private $ch 				= null;
+	private $ch 			= null;
 	private $debug_log;
 	private $debug_mode 		= false;
 	private $application_name 	= null;
 	private $api_version 		= "v1";
 	// pagination vars
-	public $last_count 			= 0;
-	public $page_size 			= 0;
+	public $last_count 		= 0;
+	public $page_size 		= 0;
 	public $total_pages 		= 0;
 	public $current_page 		= 0;
 	
@@ -124,6 +124,20 @@ class flexmlsAPI {
 	////////////////////////////////////////////////////////////////////
 	//  SEARCH FUNCTIONS 
 	//////////////////////////////////////////////////////////////////// 
+
+
+	function GetMyAccount() {
+
+		$endpoint = "/{$this->api_version}/my/account";
+
+		$result = $this->MakeAPIRequest("GET", $endpoint, array(), array(), $auth = false);
+
+		if ($result === false) {
+			return false;
+		}
+
+		return $result[0];
+	}
 
 
 	function GetContacts($tags = "") {
