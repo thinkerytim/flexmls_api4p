@@ -377,6 +377,20 @@ class flexmlsAPI {
 
 	}
 
+        function GetOfficeAgents($id) {
+
+                $result = $this->MakeAPIRequest("GET", "/{$this->api_version}/accounts/by/office/{$id}", $args, array(), $auth = false);
+
+                if ($result === false) {
+                    return false;
+                }
+
+        return $result;
+
+        }
+
+
+
 	function GetIDXLinks($tags = "") {
 
 		$args = array();
