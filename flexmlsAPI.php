@@ -235,6 +235,19 @@ class flexmlsAPI {
 
         return $result[0];
     }
+    
+    
+    function SendMessage($message_data) {
+        $data = array('Messages' => array($message_data));
+
+        $result = $this->MakeAPIRequest("POST", "/{$this->api_version}/messages", array(), $data, $auth = false);
+
+        if ($result === false) {
+            return false;
+        }
+
+        return $result[0];
+    }      
 
 
     function GetConnectPrefs() {
