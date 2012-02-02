@@ -155,14 +155,14 @@ class flexmlsAPI {
     }
 
 
-    function GetContacts($tags = "") {
+    function GetContacts($tags = "", $args = array()) {
 
         $endpoint = "/{$this->api_version}/contacts";
         if (!empty($tags)) {
             $endpoint = "/{$this->api_version}/contacts/tags/".rawurlencode($tags);
         }
 
-        $result = $this->MakeAPIRequest("GET", $endpoint, array(), array(), $auth = false);
+        $result = $this->MakeAPIRequest("GET", $endpoint, $args, array(), $auth = false);
 
         if ($result === false) {
             return false;
